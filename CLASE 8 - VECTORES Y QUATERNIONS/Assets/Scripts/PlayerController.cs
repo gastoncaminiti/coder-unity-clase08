@@ -9,13 +9,16 @@ public class PlayerController : MonoBehaviour
     public float speedPlayer = 1f;
     public GameObject swordPlayer;
     public Vector3 initPosition = new Vector3(4, 2, 1);
-    public Vector3 swordPosition = new Vector3(0, 0, 0.5f);
+    public Vector3 swordPosition = new Vector3(0, 0, 0.3f);
+
+    
+    public float cameraAxisX = -90f;
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = initPosition;
+        //transform.position = initPosition;
         swordPlayer.GetComponent<SwordController>().SetSwordName("Espadon 9000");
-        swordPlayer.transform.position = transform.position + Vector3.forward;
+        swordPlayer.transform.position = transform.position + swordPosition;
         swordPlayer.transform.localScale = transform.localScale;
     }
 
@@ -23,7 +26,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
       Move();
-      swordPlayer.transform.position = transform.position + swordPosition;
+      RotatePlayer();
+      //swordPlayer.transform.position = transform.position + swordPosition;
+
     }
 
     private void Move()
@@ -31,5 +36,12 @@ public class PlayerController : MonoBehaviour
         float ejeHorizontal = Input.GetAxisRaw("Horizontal");
         float ejeVertical = Input.GetAxisRaw("Vertical");
         transform.Translate(speedPlayer * Time.deltaTime * new Vector3(ejeHorizontal, 0, ejeVertical));
+    }
+
+    private void RotatePlayer()
+    {
+        cameraAxisX += Input.GetAxis("Mouse X");
+        Quaternion angulo   = Quaternion.Euler(0, cameraAxisX, 0);
+        transform.localRotation = angulo;
     }
 }

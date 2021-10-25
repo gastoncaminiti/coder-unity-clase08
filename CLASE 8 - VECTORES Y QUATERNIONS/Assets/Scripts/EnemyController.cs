@@ -7,14 +7,18 @@ public class EnemyController : MonoBehaviour
     public float speedEnemy = 5.0f;
     public float liveEnemy = 7.0f;
     bool isForward = true;
+    private GameObject player;
     // Start is called before the first frame update
     void Start()
     {
-        Debug.DrawLine(transform.position, new Vector3(5, 0, 0), Color.red, 5f);
+        player = GameObject.Find("Player");
     }
     // Update is called once per frame
     void Update()
     {
+        LookAtPlayer();
+        MoveTowards();
+        /*
         if (isForward)
         {
             MoveEnemy(Vector3.forward);
@@ -40,9 +44,23 @@ public class EnemyController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        */
     }
     private void MoveEnemy(Vector3 direction)
     {
         transform.Translate(speedEnemy * Time.deltaTime * direction);
     }
+
+    private void MoveTowards()
+    {
+        Vector3 direction   = (player.transform.position - transform.position).normalized;
+        transform.position += speedEnemy * direction * Time.deltaTime;
+    }
+
+    private void LookAtPlayer()
+    {
+        Quaternion newRotation = Quaternion.LookRotation(player.transform.position - transform.position);
+        transform.rotation = newRotation;
+    }
+
 }
